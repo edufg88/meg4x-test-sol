@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "493022a0-c859-4231-b82d-d7320a74bc6a",
+  "uuid": "dfba3530-e62e-4058-a6d2-a4d73a83638c",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "SummoningHeroCard"
+    "syncNodeName": "SummonedHeroCard"
   }
 }
