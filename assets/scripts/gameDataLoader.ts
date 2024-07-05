@@ -9,12 +9,8 @@ export class GameDataLoader {
     private heroesSettingsPath = 'settings/heroes';
     private gameStateSettingsPath = 'settings/initial_state';
 
-    public buildings$: Observable<Building[]>;
-    public heroes$: Observable<Hero[]>;
-    public gameState$: Observable<GameState>;
-
-    constructor() {
-        this.buildings$ = this.loadJsonAsset(this.buildingsSettingsPath).pipe(
+    constructor(buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
+        buildings$ = this.loadJsonAsset(this.buildingsSettingsPath).pipe(
             map(jsonAsset => jsonAsset.json as Building[]),
             catchError(err => {
                 console.error('Error loading buildings:', err);
@@ -22,7 +18,7 @@ export class GameDataLoader {
             })
         );
 
-        this.heroes$ = this.loadJsonAsset(this.heroesSettingsPath).pipe(
+        heroes$ = this.loadJsonAsset(this.heroesSettingsPath).pipe(
             map(jsonAsset => jsonAsset.json as Hero[]),
             catchError(err => {
                 console.error('Error loading heroes:', err);
@@ -30,7 +26,7 @@ export class GameDataLoader {
             })
         );
 
-        this.gameState$ = this.loadJsonAsset(this.gameStateSettingsPath).pipe(
+        gameState$ = this.loadJsonAsset(this.gameStateSettingsPath).pipe(
             map(jsonAsset => jsonAsset.json as GameState),
             catchError(err => {
                 console.error('Error loading game state:', err);
@@ -49,14 +45,6 @@ export class GameDataLoader {
                 observer.next(asset);
                 observer.complete();
             });
-        });
-    }
-
-    get allData$(): Observable<{ buildings: Building[], heroes: Hero[], gameState: GameState }> {
-        return forkJoin({
-            buildings: this.buildings$,
-            heroes: this.heroes$,
-            gameState: this.gameState$
         });
     }
 }

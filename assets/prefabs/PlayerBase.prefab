@@ -28,11 +28,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 17
+        "__id__": 21
       }
     ],
     "_prefab": {
-      "__id__": 19
+      "__id__": 23
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -232,30 +232,73 @@
       "__id__": 1
     },
     "mountedChildren": [],
-    "mountedComponents": [],
-    "propertyOverrides": [
+    "mountedComponents": [
       {
         "__id__": 11
-      },
-      {
-        "__id__": 13
-      },
-      {
-        "__id__": 14
-      },
+      }
+    ],
+    "propertyOverrides": [
       {
         "__id__": 15
       },
       {
-        "__id__": 16
+        "__id__": 17
+      },
+      {
+        "__id__": 18
+      },
+      {
+        "__id__": 19
+      },
+      {
+        "__id__": 20
       }
     ],
     "removedComponents": []
   },
   {
-    "__type__": "CCPropertyOverrideInfo",
+    "__type__": "cc.MountedComponentsInfo",
     "targetInfo": {
       "__id__": 12
+    },
+    "components": [
+      {
+        "__id__": 13
+      }
+    ]
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "c46/YsCPVOJYA4mWEpNYRx"
+    ]
+  },
+  {
+    "__type__": "201f6d/6vxHEaIhIPtkz9Ex",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {
+      "mountedRoot": {
+        "__id__": 8
+      }
+    },
+    "node": {
+      "__id__": 8
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 14
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "59NVfadFxOo7Zn/6zCNdQ2"
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 16
     },
     "propertyPath": [
       "_name"
@@ -271,7 +314,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 12
+      "__id__": 16
     },
     "propertyPath": [
       "_lpos"
@@ -286,7 +329,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 12
+      "__id__": 16
     },
     "propertyPath": [
       "_lrot"
@@ -302,7 +345,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 12
+      "__id__": 16
     },
     "propertyPath": [
       "_euler"
@@ -317,7 +360,7 @@
   {
     "__type__": "CCPropertyOverrideInfo",
     "targetInfo": {
-      "__id__": 12
+      "__id__": 16
     },
     "propertyPath": [
       "_lscale"
@@ -339,7 +382,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 18
+      "__id__": 22
     },
     "_contentSize": {
       "__type__": "cc.Size",
