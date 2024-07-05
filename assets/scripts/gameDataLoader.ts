@@ -1,5 +1,5 @@
 import { JsonAsset, resources } from "cc";
-import { catchError, forkJoin, map, Observable, of } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
 import { Building } from "./models/building";
 import { defaultGameState, GameState } from "./models/gameState";
 import { Hero } from "./models/hero";
@@ -27,7 +27,7 @@ export class GameDataLoader {
 
     constructor() {
         this._buildings$ = this.loadJsonAsset(this.buildingsSettingsPath).pipe(
-            map(jsonAsset => jsonAsset.json as Building[]),
+            map(jsonAsset => this.mapJsonToBuildings(jsonAsset.json)),
             catchError(err => {
                 console.error('Error loading buildings:', err);
                 return [];
@@ -55,9 +55,19 @@ export class GameDataLoader {
         return {
             currency: json.state.currency,
             buildings: json.state.buildings,
-            heroes: json.state.heroes,
-            summoningQueue: [] // Initialize with an empty array as the JSON does not provide this
+            heroes: json.state.heroes
         };
+    }
+
+    private mapJsonToBuildings(json: any): Building[] {
+        return json.buildings.map((building: any) => ({
+            id: building.id,
+            name: building.name,
+            description: building.description,
+            cost: building.cost,
+            hireSlots: building.settings.hireSlots,
+            summoningQueue: []
+        }));
     }
 
     private loadJsonAsset(path: string): Observable<JsonAsset> {

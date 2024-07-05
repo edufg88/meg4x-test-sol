@@ -12,4 +12,3 @@ export class CurrencyViewModel {
         this._gameState$ = gameState$;
     }
 }
-
