@@ -18,7 +18,7 @@ export class Game extends Component {
     @property(TownBuilding)
     private townBuildings: TownBuilding[] = [];
 
-    private dataLoader?: GameDataLoader;
+    private dataLoader: GameDataLoader = null!;
 
     // TODO: Try to work always with streams not data itself.
     /*
@@ -27,6 +27,7 @@ export class Game extends Component {
     private gameState: GameState = { currency: 0, buildings: [], heroes: [], summoningQueue: [] };    
     */
 
+    /*
     private buildingsSubject = new BehaviorSubject<Building[]>([]);
     private heroSubject = new BehaviorSubject<Hero[]>([]);
     private gameStateSubject = new BehaviorSubject<GameState>(defaultGameState);
@@ -34,13 +35,26 @@ export class Game extends Component {
     public buildings$ = this.buildingsSubject.asObservable();
     public heroes$ = this.heroSubject.asObservable();
     public gameState$ = this.gameStateSubject.asObservable();
+    */
 
-    onLoad() {
-        this.dataLoader = new GameDataLoader(this.buildings$, this.heroes$, this.gameState$);
-        this.hud.init(this.townBuildings, this.buildings$, this.heroes$, this.gameState$);
+    get buildings$() {
+        return this.dataLoader.buildings$;
+    }
+
+    get heroes$() {
+        return this.dataLoader.heroes$;
+    }
+
+    get gameState$() {
+        return this.dataLoader.gameState$;
+    }
+
+    onLoad() {        
     }
 
     start() {
+        this.dataLoader = new GameDataLoader();
+        this.hud.init(this.townBuildings, this.buildings$, this.heroes$, this.gameState$);
     }
 
     update(deltaTime: number) {

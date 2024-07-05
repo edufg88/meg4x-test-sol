@@ -3849,6 +3849,9 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "amountLabel": {
+      "__id__": 171
+    },
     "_id": "0fJ67Mel1L7IPTieEIkhrA"
   },
   {

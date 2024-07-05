@@ -1,9 +1,6 @@
-import { _decorator, Component, Node } from 'cc';
-import { Subject } from 'rxjs';
-import { TownBuilding } from '../components/townBuilding';
-const { ccclass, property } = _decorator;
+import { Subject } from "rxjs";
+import { TownBuilding } from "../components/townBuilding";
 
-@ccclass('BuildingViewModel')
 export class BuildingViewModel {
     private buildingClickSubject = new Subject<string>();
 

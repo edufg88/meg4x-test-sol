@@ -1,14 +1,15 @@
-import { _decorator, Component, Node } from 'cc';
-const { ccclass, property } = _decorator;
+import { Observable } from "rxjs";
+import { GameState } from "../models/gameState";
 
-@ccclass('CurrencyViewModel')
-export class CurrencyViewModel extends Component {
-    start() {
+export class CurrencyViewModel {
+    private _gameState$: Observable<GameState> = null!;
 
+    get gameState$() {
+        return this._gameState$;
     }
 
-    update(deltaTime: number) {
-        
+    constructor(gameState$: Observable<GameState>) {
+        this._gameState$ = gameState$;
     }
 }
 

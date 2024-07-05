@@ -9,8 +9,24 @@ export class GameDataLoader {
     private heroesSettingsPath = 'settings/heroes';
     private gameStateSettingsPath = 'settings/initial_state';
 
-    constructor(buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
-        buildings$ = this.loadJsonAsset(this.buildingsSettingsPath).pipe(
+    private _buildings$: Observable<Building[]> = null!;
+    private _heroes$: Observable<Hero[]> = null!;
+    private _gameState$: Observable<GameState> = null!;
+
+    get buildings$() {
+        return this._buildings$;
+    }
+
+    get heroes$() {
+        return this._heroes$;
+    }
+
+    get gameState$() {
+        return this._gameState$;
+    }
+
+    constructor() {
+        this._buildings$ = this.loadJsonAsset(this.buildingsSettingsPath).pipe(
             map(jsonAsset => jsonAsset.json as Building[]),
             catchError(err => {
                 console.error('Error loading buildings:', err);
@@ -18,7 +34,7 @@ export class GameDataLoader {
             })
         );
 
-        heroes$ = this.loadJsonAsset(this.heroesSettingsPath).pipe(
+        this._heroes$ = this.loadJsonAsset(this.heroesSettingsPath).pipe(
             map(jsonAsset => jsonAsset.json as Hero[]),
             catchError(err => {
                 console.error('Error loading heroes:', err);
@@ -26,13 +42,22 @@ export class GameDataLoader {
             })
         );
 
-        gameState$ = this.loadJsonAsset(this.gameStateSettingsPath).pipe(
-            map(jsonAsset => jsonAsset.json as GameState),
+        this._gameState$ = this.loadJsonAsset(this.gameStateSettingsPath).pipe(
+            map(jsonAsset => this.mapJsonToGameState(jsonAsset.json)),
             catchError(err => {
                 console.error('Error loading game state:', err);
                 return of(defaultGameState);
             })
         );
+    }
+
+    private mapJsonToGameState(json: any): GameState {
+        return {
+            currency: json.state.currency,
+            buildings: json.state.buildings,
+            heroes: json.state.heroes,
+            summoningQueue: [] // Initialize with an empty array as the JSON does not provide this
+        };
     }
 
     private loadJsonAsset(path: string): Observable<JsonAsset> {
