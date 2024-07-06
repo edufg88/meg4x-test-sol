@@ -18,7 +18,7 @@ export class TownBuilding extends Component {
     onLoad() {
         this.button.node.on(Button.EventType.CLICK, () => {
             this.buttonClickSubject.next(this.id);
-        })
+        });
     }
 }
 

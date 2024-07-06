@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label, Prefab, instantiate, ToggleContainer, Toggle, game } from 'cc';
+import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label, Prefab, instantiate, ToggleContainer, Toggle, game, Layout } from 'cc';
 import { Subject } from 'rxjs';
 import { HeroSpriteData } from '../heroSpriteData';
 import { Building } from '../models/building';
@@ -7,6 +7,7 @@ import { Hero } from '../models/hero';
 import { BuildingViewModel } from '../viewModels/buildingViewModel';
 import { HeroCardView } from './heroCardView';
 import { HeroHireButtonView } from './heroHireButtonView';
+import { HeroHireSlotView } from './heroHireSlotView';
 const { ccclass, property } = _decorator;
 
 @ccclass('BuildingPanelView')
@@ -22,8 +23,14 @@ export class BuildingPanelView extends Component {
     private heroHireButtonView: HeroHireButtonView = null!;
     @property(Node)
     private heroCardParent: Node = null!;
+    @property(Node)
+    private heroSlotsParent: Node = null!;
+    @property(Layout)
+    private heroSlotsLayout: Layout = null!;
     @property(Prefab)
     private heroCardPrefab: Prefab = null!;
+    @property(Prefab)
+    private heroHireSlotPrefab: Prefab = null!;
     @property(HeroSpriteData)
     private heroSpriteData: HeroSpriteData = null!;
 
@@ -34,13 +41,17 @@ export class BuildingPanelView extends Component {
     private buildings: Building[] = [];
     private building?: Building;
     private currency: number = 0;
+    private heroSlotViews: HeroHireSlotView[] = [];
+    private hero?: Hero;
 
     get toggleClick$() {
         return this.toggleClickSubject.asObservable();
     }
 
     public init(buildingViewModel: BuildingViewModel) {
+        this.heroSlotViews = this.heroSlotsParent.getComponentsInChildren(HeroHireSlotView);
         this.heroHireButtonView.init(this.toggleClick$);
+        this.heroHireButtonView.buttonClick$.subscribe(() => this.onHireButtonClick());
         buildingViewModel.buildingClick$.subscribe(buildingId => this.onTownBuildingClick(buildingId));
         buildingViewModel.buildings$.subscribe(buildings => this.onBuildingsUpdated(buildings));
         buildingViewModel.heroes$.subscribe(heroes => this.onHeroesUpdated(heroes));
@@ -69,7 +80,21 @@ export class BuildingPanelView extends Component {
     private loadBuilding(building: Building) {
         this.title.string = building.name;
         this.description.string = building.description;
-        // TODO: Load rest of things
+
+        /* TODO: I was using this code to instantiate dynamically but eventhough 
+        everything seemed ok (positions, nodes active etc) only 1 was showing.
+        For the test purpose I will preinstantiate 5 nodes.
+
+        for (let i = 0; i < building.hireSlots; ++i) {
+            let heroSlotNode = instantiate(this.heroHireSlotPrefab);
+            heroSlotNode.parent = this.heroSlotsParent;            
+            let heroSlotView = heroSlotNode.getComponent(HeroHireSlotView);
+            if (heroSlotView) {
+                this.heroSlotViews.push(heroSlotView);
+            }
+        }
+        this.heroSlotsLayout.updateLayout(true);
+        */
     }
 
     private loadHeroes(heroes: Hero[]) {
@@ -88,6 +113,7 @@ export class BuildingPanelView extends Component {
 
     private onToggleChanged(toggle: Toggle, hero: Hero) {
         console.log('Toggle changed: ', toggle.isChecked, hero.id);
+        this.hero = toggle.isChecked ? hero : undefined;
         const canHire =
             this.building != null &&
             this.building.hireSlots > this.building.summoningQueue.length &&
@@ -116,6 +142,22 @@ export class BuildingPanelView extends Component {
             this.hide();
         } else {
             this.show();
+        }
+    }
+
+    private onHireButtonClick() {
+        if (this.building) {
+            if (this.building.summoningQueue.length == this.building.hireSlots) {
+                console.error('Error queue is full');
+            }
+            else {
+                console.log('Index: ', this.building.summoningQueue.length);
+                const slotIdx = this.building.summoningQueue.length;
+                const slot = this.heroSlotViews[slotIdx];
+                if (this.hero) {
+                    slot.init(this.hero, this.heroSpriteData);
+                }
+            }
         }
     }
 }

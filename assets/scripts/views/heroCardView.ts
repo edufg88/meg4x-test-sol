@@ -11,8 +11,6 @@ export class HeroCardView extends Component {
     private rankSprite: Sprite = null!;
     @property(Sprite)
     private typeSprite: Sprite = null!;
-    @property(Sprite)
-    private frameSprite: Sprite = null!;
 
     public init(hero: Hero, heroSpriteData: HeroSpriteData) {
         this.heroSprite.spriteFrame = heroSpriteData.getHeroSpriteFrame(hero.id);

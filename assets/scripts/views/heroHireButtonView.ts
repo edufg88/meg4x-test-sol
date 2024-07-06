@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Button, Label, Color } from 'cc';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 const { ccclass, property } = _decorator;
 
 @ccclass('HeroHireButtonView')
@@ -13,8 +13,17 @@ export class HeroHireButtonView extends Component {
     private koColor: Color = Color.RED;
     private disabledColor: Color = Color.WHITE;
 
+    private buttonClickSubject = new Subject<void>();
+
+    get buttonClick$() {
+        return this.buttonClickSubject.asObservable();
+    }
+
     public init(heroSelection$: Observable<[boolean, boolean, number]>) {
         this.button.interactable = false;
+        this.button.node.on(Button.EventType.CLICK, () => {
+            this.buttonClickSubject.next();
+        });
         heroSelection$.subscribe(([active, canHire, price]) => this.onHeroSelectionChanged(active, canHire, price));
     }
 
