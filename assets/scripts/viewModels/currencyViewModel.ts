@@ -1,4 +1,5 @@
 import { Observable, Subject } from "rxjs";
+import { Building } from "../models/building";
 import { GameState } from "../models/gameState";
 import { Hero } from "../models/hero";
 
@@ -14,12 +15,12 @@ export class CurrencyViewModel {
         return this.currencySpentSubject.asObservable();
     }
 
-    constructor(gameState$: Observable<GameState>, heroHireObservable$: Observable<Hero>) {
+    constructor(gameState$: Observable<GameState>, heroHireObservable$: Observable<[Hero, Building]>) {
         this._gameState$ = gameState$;
-        heroHireObservable$.subscribe(hero => this.onHeroHire(hero));
+        heroHireObservable$.subscribe(([hero, building]) => this.onHeroHire(hero, building));
     }
 
-    private onHeroHire(hero: Hero) {
+    private onHeroHire(hero: Hero, building: Building) {
         this.currencySpentSubject.next(hero.cost);
     }
 }

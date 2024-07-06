@@ -28,14 +28,14 @@ export class Hud extends Component {
     private currencyViewModel: CurrencyViewModel = null!;
     private buildingViewModel: BuildingViewModel = null!;
     private townSignpostViewModel: TownSignpostViewModel = null!;
-    private heroHireSubject = new Subject<Hero>();
+    private heroHireSubject = new Subject<[Hero, Building]>();
 
     get heroHire$() {
         return this.heroHireSubject.asObservable();
     }
 
     public init(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
-        this.buildingPanelView.addHireHeroCallback(hero => this.heroHireSubject.next(hero));
+        this.buildingPanelView.addHireHeroCallback((hero, building) => this.heroHireSubject.next([hero, building]));
         this.currencyViewModel = new CurrencyViewModel(gameState$, this.heroHireSubject.asObservable());
         this.buildingViewModel = new BuildingViewModel(townBuildings, buildings$, heroes$, gameState$);
         this.townSignpostViewModel = new TownSignpostViewModel();

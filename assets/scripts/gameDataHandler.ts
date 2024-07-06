@@ -91,6 +91,26 @@ export class GameDataHandler {
         }
     }
 
+    public addHeroToBuilding(hero: Hero, building: Building) {
+        let buildings = this._buildings$.value;
+        buildings.forEach(b => {
+            if (b.id === building.id) {
+                b.summoningQueue.push(hero);
+            }
+        })
+        this.updateBuildings(buildings);
+    }
+
+    public removeHeroFromBuilding(hero: Hero, building: Building) {
+        let buildings = this._buildings$.value;
+        buildings.forEach(b => {
+            if (b.id === building.id) {
+                b.summoningQueue = b.summoningQueue.filter(h => h !== hero);
+            }
+        })
+        this.updateBuildings(buildings);
+    }
+
     public updateBuildings(newBuildings: Building[]) {
         this._buildings$.next(newBuildings);
     }

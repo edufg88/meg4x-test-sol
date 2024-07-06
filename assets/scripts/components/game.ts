@@ -4,6 +4,8 @@ import { _decorator, Component } from 'cc';
 import { Hud } from "./hud";
 import { TownBuilding } from "./townBuilding";
 import { map, timer } from "rxjs";
+import { Hero } from "../models/hero";
+import { Building } from "../models/building";
 
 const { ccclass, property } = _decorator;
 
@@ -15,28 +17,36 @@ export class Game extends Component {
     @property(TownBuilding)
     private townBuildings: TownBuilding[] = [];
 
-    private dataLoader: GameDataHandler = null!;
+    private dataHandler: GameDataHandler = null!;
 
     get buildings$() {
-        return this.dataLoader.buildings$;
+        return this.dataHandler.buildings$;
     }
 
     get heroes$() {
-        return this.dataLoader.heroes$;
+        return this.dataHandler.heroes$;
     }
 
     get gameState$() {
-        return this.dataLoader.gameState$;
+        return this.dataHandler.gameState$;
     }
 
     start() {
-        this.dataLoader = new GameDataHandler();
+        this.dataHandler = new GameDataHandler();
         this.hud.init(this.townBuildings, this.buildings$, this.heroes$, this.gameState$);
-        this.hud.heroHire$.subscribe(hero => this.decreaseCurrency(hero.cost));
+        this.hud.heroHire$.subscribe(([hero, building]) => {
+            this.addHeroToBuilding(hero, building);
+            this.decreaseCurrency(hero.cost);
+        });
+    }
+
+    private addHeroToBuilding(hero: Hero, building: Building) {
+        console.log(hero.id, building.id);
+        this.dataHandler.addHeroToBuilding(hero, building);
     }
 
     private decreaseCurrency(value: number) {
-        this.dataLoader.decreaseCurrency(value);
+        this.dataHandler.decreaseCurrency(value);
     }
 }
 

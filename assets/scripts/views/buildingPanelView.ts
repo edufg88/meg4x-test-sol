@@ -43,7 +43,7 @@ export class BuildingPanelView extends Component {
     private currency: number = 0;
     private heroSlotViews: HeroHireSlotView[] = [];
     private hero?: Hero;
-    private hireHeroCallBacks: ((arg: Hero) => void)[] = [];
+    private hireHeroCallBacks: ((hero: Hero, building: Building) => void)[] = [];
 
     get toggleClick$() {
         return this.toggleClickSubject.asObservable();
@@ -114,7 +114,6 @@ export class BuildingPanelView extends Component {
     }
 
     private onToggleChanged(toggle: Toggle, hero: Hero) {
-        console.log('Toggle changed: ', toggle.isChecked, hero.id);
         this.hero = toggle.isChecked ? hero : undefined;
         const canHire =
             this.building != null &&
@@ -162,8 +161,8 @@ export class BuildingPanelView extends Component {
                 if (this.hero) {
                     slot.init(this.hero, this.heroSpriteData);
                     this.hireHeroCallBacks.forEach(callback => {
-                        if (this.hero) {
-                            callback(this.hero);
+                        if (this.hero && this.building) {
+                            callback(this.hero, this.building);
                         }
                     });
                 }
@@ -171,7 +170,7 @@ export class BuildingPanelView extends Component {
         }
     }
 
-    public addHireHeroCallback(callback: (arg: Hero) => void) {
+    public addHireHeroCallback(callback: (hero: Hero, building: Building) => void) {
         this.hireHeroCallBacks.push(callback);
     }
 }
