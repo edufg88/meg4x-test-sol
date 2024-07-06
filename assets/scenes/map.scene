@@ -2695,6 +2695,7 @@
     "description": {
       "__id__": 43
     },
+    "toggleGroup": null,
     "heroCardParent": {
       "__id__": 80
     },

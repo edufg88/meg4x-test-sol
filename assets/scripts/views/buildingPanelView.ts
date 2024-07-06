@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label, Prefab, instantiate } from 'cc';
+import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label, Prefab, instantiate, ToggleContainer, Toggle } from 'cc';
 import { HeroSpriteData } from '../heroSpriteData';
 import { Building } from '../models/building';
 import { Hero } from '../models/hero';
@@ -13,6 +13,8 @@ export class BuildingPanelView extends Component {
     private title: Label = null!;
     @property(Label)
     private description: Label = null!;
+    @property(ToggleContainer)
+    private toggleGroup: ToggleContainer = null!;
     @property(Node)
     private heroCardParent: Node = null!;
     @property(Prefab)
@@ -63,7 +65,16 @@ export class BuildingPanelView extends Component {
             heroCardNode.parent = this.heroCardParent;
             const heroCardComponent = heroCardNode.getComponent(HeroCardView);
             heroCardComponent?.init(hero, this.heroSpriteData);
+            const heroToggle = heroCardNode.getComponent(Toggle);
+            if (heroToggle) {
+                heroToggle.isChecked = false;
+                heroToggle.node.on('toggle', (toggle: Toggle) => this.onToggleChanged(toggle, hero.id), this);
+            }
         });
+    }
+
+    private onToggleChanged(toggle: Toggle, heroId: string) {
+        console.log('Toggle changed: ', toggle.isChecked, heroId);
     }
 
     private onBuildingsUpdated(buildings: Building[]) {
