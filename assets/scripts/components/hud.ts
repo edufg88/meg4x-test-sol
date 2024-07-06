@@ -1,5 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Building } from '../models/building';
 import { GameState } from '../models/gameState';
 import { Hero } from '../models/hero';
@@ -28,9 +28,11 @@ export class Hud extends Component {
     private currencyViewModel: CurrencyViewModel = null!;
     private buildingViewModel: BuildingViewModel = null!;
     private townSignpostViewModel: TownSignpostViewModel = null!;
+    private heroHireSubject = new Subject<Hero>();
 
     public init(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
-        this.currencyViewModel = new CurrencyViewModel(gameState$);
+        this.buildingPanelView.addHireHeroCallback(hero => this.heroHireSubject.next(hero));
+        this.currencyViewModel = new CurrencyViewModel(gameState$, this.heroHireSubject.asObservable());
         this.buildingViewModel = new BuildingViewModel(townBuildings, buildings$, heroes$, gameState$);
         this.townSignpostViewModel = new TownSignpostViewModel();
         this.currencyView.init(this.currencyViewModel);
@@ -38,6 +40,5 @@ export class Hud extends Component {
         this.townSignpostView.init(this.townSignpostViewModel);
         this.townSignpostPanelView.init(this.townSignpostViewModel);
     }
-
 }
 

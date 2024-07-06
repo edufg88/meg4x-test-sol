@@ -38,4 +38,7 @@ export class BuildingViewModel {
     private onTownBuildingClick(buildingId: string) {
         this.buildingClickSubject.next(buildingId);
     }
+
+    public onHeroHire(hero: Hero) {
+    }
 }

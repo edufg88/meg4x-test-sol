@@ -43,12 +43,14 @@ export class BuildingPanelView extends Component {
     private currency: number = 0;
     private heroSlotViews: HeroHireSlotView[] = [];
     private hero?: Hero;
+    private hireHeroCallBacks: ((arg: Hero) => void)[] = [];
 
     get toggleClick$() {
         return this.toggleClickSubject.asObservable();
     }
 
     public init(buildingViewModel: BuildingViewModel) {
+        this.hireHeroCallBacks.push(buildingViewModel.onHeroHire)
         this.heroSlotViews = this.heroSlotsParent.getComponentsInChildren(HeroHireSlotView);
         this.heroHireButtonView.init(this.toggleClick$);
         this.heroHireButtonView.buttonClick$.subscribe(() => this.onHireButtonClick());
@@ -156,8 +158,17 @@ export class BuildingPanelView extends Component {
                 const slot = this.heroSlotViews[slotIdx];
                 if (this.hero) {
                     slot.init(this.hero, this.heroSpriteData);
+                    this.hireHeroCallBacks.forEach(callback => {
+                        if (this.hero) {
+                            callback(this.hero);
+                        }
+                    });
                 }
             }
         }
+    }
+
+    public addHireHeroCallback(callback: (arg: Hero) => void) {
+        this.hireHeroCallBacks.push(callback);
     }
 }
