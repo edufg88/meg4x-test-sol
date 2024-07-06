@@ -1,6 +1,3 @@
-import { Building } from "../models/building";
-import { Hero } from "../models/hero";
-import { defaultGameState, GameState } from "../models/gameState";
 import { GameDataLoader } from "../gameDataLoader";
 
 import { _decorator, Component } from 'cc';
@@ -31,16 +28,9 @@ export class Game extends Component {
         return this.dataLoader.gameState$;
     }
 
-    onLoad() {        
-    }
-
     start() {
         this.dataLoader = new GameDataLoader();
         this.hud.init(this.townBuildings, this.buildings$, this.heroes$, this.gameState$);
-    }
-
-    update(deltaTime: number) {
-        
     }
 }
 

@@ -35,7 +35,7 @@ export class GameDataLoader {
         );
 
         this._heroes$ = this.loadJsonAsset(this.heroesSettingsPath).pipe(
-            map(jsonAsset => jsonAsset.json as Hero[]),
+            map(jsonAsset => jsonAsset.json?.heroes as Hero[]),
             catchError(err => {
                 console.error('Error loading heroes:', err);
                 return [];

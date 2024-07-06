@@ -1,6 +1,9 @@
-import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label } from 'cc';
+import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label, Prefab, instantiate } from 'cc';
+import { HeroSpriteData } from '../heroSpriteData';
 import { Building } from '../models/building';
+import { Hero } from '../models/hero';
 import { BuildingViewModel } from '../viewModels/buildingViewModel';
+import { HeroCardView } from './heroCardView';
 const { ccclass, property } = _decorator;
 
 @ccclass('BuildingPanelView')
@@ -10,6 +13,12 @@ export class BuildingPanelView extends Component {
     private title: Label = null!;
     @property(Label)
     private description: Label = null!;
+    @property(Node)
+    private heroCardParent: Node = null!;
+    @property(Prefab)
+    private heroCardPrefab: Prefab = null!;
+    @property(HeroSpriteData)
+    private heroSpriteData: HeroSpriteData = null!;
 
     private showing: boolean = false;
     private hidePosition: Vec3 = new Vec3(0, 0, 0);
@@ -20,6 +29,7 @@ export class BuildingPanelView extends Component {
     public init(buildingViewModel: BuildingViewModel) {
         buildingViewModel.buildingClick$.subscribe(buildingId => this.onTownBuildingClick(buildingId));
         buildingViewModel.buildings$.subscribe(buildings => this.onBuildingsUpdated(buildings));
+        buildingViewModel.heroes$.subscribe(heroes => this.onHeroesUpdated(heroes));
         const screenHeight = view.getVisibleSize().height;
         const panelHeight = this.node.getComponent(UITransform)?.height ?? 0;
         this.showPosition = new Vec3(0, -screenHeight * 0.5 + panelHeight, 0);
@@ -47,11 +57,24 @@ export class BuildingPanelView extends Component {
         // TODO: Load rest of things
     }
 
+    private loadHeroes(heroes: Hero[]) {
+        heroes.forEach(hero => {
+            const heroCardNode = instantiate(this.heroCardPrefab);
+            heroCardNode.parent = this.heroCardParent;
+            const heroCardComponent = heroCardNode.getComponent(HeroCardView);
+            heroCardComponent?.init(hero, this.heroSpriteData);
+        });
+    }
+
     private onBuildingsUpdated(buildings: Building[]) {
         this.buildings = buildings;
         if (this.currentBuildingId === '') {
             this.loadBuilding(buildings[0]);
         }
+    }
+
+    private onHeroesUpdated(heroes: Hero[]) {
+        this.loadHeroes(heroes);
     }
 
     private onTownBuildingClick(buildingId: string) {
