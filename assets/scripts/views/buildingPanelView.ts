@@ -1,9 +1,12 @@
-import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label, Prefab, instantiate, ToggleContainer, Toggle } from 'cc';
+import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label, Prefab, instantiate, ToggleContainer, Toggle, game } from 'cc';
+import { Subject } from 'rxjs';
 import { HeroSpriteData } from '../heroSpriteData';
 import { Building } from '../models/building';
+import { GameState } from '../models/gameState';
 import { Hero } from '../models/hero';
 import { BuildingViewModel } from '../viewModels/buildingViewModel';
 import { HeroCardView } from './heroCardView';
+import { HeroHireButtonView } from './heroHireButtonView';
 const { ccclass, property } = _decorator;
 
 @ccclass('BuildingPanelView')
@@ -14,7 +17,9 @@ export class BuildingPanelView extends Component {
     @property(Label)
     private description: Label = null!;
     @property(ToggleContainer)
-    private toggleGroup: ToggleContainer = null!;
+    private toggleContainer: ToggleContainer = null!;
+    @property(HeroHireButtonView)
+    private heroHireButtonView: HeroHireButtonView = null!;
     @property(Node)
     private heroCardParent: Node = null!;
     @property(Prefab)
@@ -22,16 +27,24 @@ export class BuildingPanelView extends Component {
     @property(HeroSpriteData)
     private heroSpriteData: HeroSpriteData = null!;
 
+    private toggleClickSubject = new Subject<[boolean, boolean, number]>();
     private showing: boolean = false;
     private hidePosition: Vec3 = new Vec3(0, 0, 0);
     private showPosition: Vec3 = new Vec3(0, 0, 0);
     private buildings: Building[] = [];
-    private currentBuildingId: string = '';
+    private building?: Building;
+    private currency: number = 0;
+
+    get toggleClick$() {
+        return this.toggleClickSubject.asObservable();
+    }
 
     public init(buildingViewModel: BuildingViewModel) {
+        this.heroHireButtonView.init(this.toggleClick$);
         buildingViewModel.buildingClick$.subscribe(buildingId => this.onTownBuildingClick(buildingId));
         buildingViewModel.buildings$.subscribe(buildings => this.onBuildingsUpdated(buildings));
         buildingViewModel.heroes$.subscribe(heroes => this.onHeroesUpdated(heroes));
+        buildingViewModel.gameState$.subscribe(gameState => this.onGameStateUpdated(gameState));
         const screenHeight = view.getVisibleSize().height;
         const panelHeight = this.node.getComponent(UITransform)?.height ?? 0;
         this.showPosition = new Vec3(0, -screenHeight * 0.5 + panelHeight, 0);
@@ -68,24 +81,34 @@ export class BuildingPanelView extends Component {
             const heroToggle = heroCardNode.getComponent(Toggle);
             if (heroToggle) {
                 heroToggle.isChecked = false;
-                heroToggle.node.on('toggle', (toggle: Toggle) => this.onToggleChanged(toggle, hero.id), this);
+                heroToggle.node.on('toggle', (toggle: Toggle) => this.onToggleChanged(toggle, hero), this);
             }
         });
     }
 
-    private onToggleChanged(toggle: Toggle, heroId: string) {
-        console.log('Toggle changed: ', toggle.isChecked, heroId);
+    private onToggleChanged(toggle: Toggle, hero: Hero) {
+        console.log('Toggle changed: ', toggle.isChecked, hero.id);
+        const canHire =
+            this.building != null &&
+            this.building.hireSlots > this.building.summoningQueue.length &&
+            this.currency > hero.cost;
+        this.toggleClickSubject.next([toggle.isChecked, canHire, hero.cost]);
     }
 
     private onBuildingsUpdated(buildings: Building[]) {
         this.buildings = buildings;
-        if (this.currentBuildingId === '') {
-            this.loadBuilding(buildings[0]);
+        if (!this.building) {
+            this.building = buildings[0];
+            this.loadBuilding(this.building);
         }
     }
 
     private onHeroesUpdated(heroes: Hero[]) {
         this.loadHeroes(heroes);
+    }
+
+    private onGameStateUpdated(gameState: GameState) {
+        this.currency = gameState.currency;
     }
 
     private onTownBuildingClick(buildingId: string) {
