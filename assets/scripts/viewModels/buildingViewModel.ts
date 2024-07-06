@@ -40,5 +40,6 @@ export class BuildingViewModel {
     }
 
     public onHeroHire(hero: Hero) {
+
     }
 }

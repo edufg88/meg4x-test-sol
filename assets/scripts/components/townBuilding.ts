@@ -15,7 +15,7 @@ export class TownBuilding extends Component {
         return this.buttonClickSubject.asObservable();
     }
 
-    onLoad() {
+    public init() {
         this.button.node.on(Button.EventType.CLICK, () => {
             this.buttonClickSubject.next(this.id);
         });

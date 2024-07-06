@@ -30,6 +30,10 @@ export class Hud extends Component {
     private townSignpostViewModel: TownSignpostViewModel = null!;
     private heroHireSubject = new Subject<Hero>();
 
+    get heroHire$() {
+        return this.heroHireSubject.asObservable();
+    }
+
     public init(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
         this.buildingPanelView.addHireHeroCallback(hero => this.heroHireSubject.next(hero));
         this.currencyViewModel = new CurrencyViewModel(gameState$, this.heroHireSubject.asObservable());
@@ -39,6 +43,7 @@ export class Hud extends Component {
         this.buildingPanelView.init(this.buildingViewModel);
         this.townSignpostView.init(this.townSignpostViewModel);
         this.townSignpostPanelView.init(this.townSignpostViewModel);
+        townBuildings.forEach(building => building.init());
     }
 }
 

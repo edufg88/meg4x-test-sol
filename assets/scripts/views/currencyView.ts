@@ -22,9 +22,7 @@ export class CurrencyView extends Component {
     }
 
     private playCurrencySpentAnimation(currency: number) {
-        console.log('Currency spent: ', currency);
         this.amountSpentLabel.string = (-currency).toString();
-
         tween(this.amountSpentOpacity)
             .to(1, { opacity: 255 })
             .to(1, { opacity: 0 })

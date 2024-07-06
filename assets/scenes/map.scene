@@ -63,7 +63,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 362
+      "__id__": 360
     },
     "_id": "8bec3b3f-67ea-482f-8f1b-f3001aba850b"
   },
@@ -7363,7 +7363,42 @@
   },
   {
     "__type__": "cc.Node",
-    "__editorExtras__": {}
+    "_name": "New Node",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "_parent": null,
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": null,
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_mobility": 0,
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": "0bQuVHkFtNHLsZ8ug/EdMp"
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -7494,13 +7529,10 @@
         "__id__": 352
       },
       {
-        "__id__": 354
+        "__id__": 355
       },
       {
-        "__id__": 357
-      },
-      {
-        "__id__": 360
+        "__id__": 358
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -7554,30 +7586,6 @@
   {
     "__type__": "cc.TargetOverrideInfo",
     "source": {
-      "__id__": 337
-    },
-    "sourceInfo": null,
-    "propertyPath": [
-      "townBuildings",
-      "0"
-    ],
-    "target": {
-      "__id__": 3
-    },
-    "targetInfo": {
-      "__id__": 351
-    }
-  },
-  {
-    "__type__": "cc.TargetInfo",
-    "localID": [
-      "8f0ZCpq7VJV6epM5qYLwgZ",
-      "59NVfadFxOo7Zn/6zCNdQ2"
-    ]
-  },
-  {
-    "__type__": "cc.TargetOverrideInfo",
-    "source": {
       "__id__": 138
     },
     "sourceInfo": null,
@@ -7588,7 +7596,7 @@
       "__id__": 341
     },
     "targetInfo": {
-      "__id__": 353
+      "__id__": 351
     }
   },
   {
@@ -7603,7 +7611,7 @@
       "__id__": 139
     },
     "sourceInfo": {
-      "__id__": 355
+      "__id__": 353
     },
     "propertyPath": [
       "amountLabel"
@@ -7612,7 +7620,7 @@
       "__id__": 139
     },
     "targetInfo": {
-      "__id__": 356
+      "__id__": 354
     }
   },
   {
@@ -7633,7 +7641,7 @@
       "__id__": 139
     },
     "sourceInfo": {
-      "__id__": 358
+      "__id__": 356
     },
     "propertyPath": [
       "amountSpentLabel"
@@ -7642,7 +7650,7 @@
       "__id__": 139
     },
     "targetInfo": {
-      "__id__": 359
+      "__id__": 357
     }
   },
   {
@@ -7670,7 +7678,7 @@
       "__id__": 139
     },
     "targetInfo": {
-      "__id__": 361
+      "__id__": 359
     }
   },
   {
@@ -7682,28 +7690,28 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 363
+      "__id__": 361
     },
     "shadows": {
-      "__id__": 364
+      "__id__": 362
     },
     "_skybox": {
-      "__id__": 365
+      "__id__": 363
     },
     "fog": {
-      "__id__": 366
+      "__id__": 364
     },
     "octree": {
-      "__id__": 367
+      "__id__": 365
     },
     "skin": {
-      "__id__": 368
+      "__id__": 366
     },
     "lightProbeInfo": {
-      "__id__": 369
+      "__id__": 367
     },
     "postSettings": {
-      "__id__": 370
+      "__id__": 368
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false

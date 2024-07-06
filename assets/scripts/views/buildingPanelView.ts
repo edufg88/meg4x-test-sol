@@ -124,6 +124,9 @@ export class BuildingPanelView extends Component {
     }
 
     private onBuildingsUpdated(buildings: Building[]) {
+        if (buildings.length === 0) {
+            return;
+        }
         this.buildings = buildings;
         if (!this.building) {
             this.building = buildings[0];
