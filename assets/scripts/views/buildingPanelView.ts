@@ -45,6 +45,7 @@ export class BuildingPanelView extends Component {
     private hero?: Hero;
     private hireHeroCallbacks: ((hero: Hero, building: Building) => void)[] = [];
     private summonCompleteCallbacks: ((building: Building) => void)[] = [];
+    private panelStateChangeCallback: ((visible: boolean, processing: boolean) => void) = null!;
 
     get toggleClick$() {
         return this.toggleClickSubject.asObservable();
@@ -53,6 +54,7 @@ export class BuildingPanelView extends Component {
     public init(buildingViewModel: BuildingViewModel) {
         this.hireHeroCallbacks.push((hero, building) => buildingViewModel.onHeroHire(hero, building));
         this.summonCompleteCallbacks.push(building => buildingViewModel.onSummonComplete(building));
+        this.panelStateChangeCallback = (visible, processing) => buildingViewModel.panelStateChange(visible, processing);
         this.heroSlotViews = this.heroSlotsParent.getComponentsInChildren(HeroHireSlotView);
         this.heroHireButtonView.init(this.toggleClick$);
         this.heroHireButtonView.buttonClick$.subscribe(() => this.onHireButtonClick());
@@ -118,7 +120,8 @@ export class BuildingPanelView extends Component {
             if (!this.heroSlotViews[0].isSummoning) {
                 this.onHeroStartSummoning(0);
             }
-        };
+        }
+        this.panelStateChangeCallback(this.showing, this.heroSlotViews.some(view => view.isSummoning));
     }
 
     private loadHeroes(heroes: Hero[]) {
@@ -191,16 +194,10 @@ export class BuildingPanelView extends Component {
         } else {
             this.show();
         }
+        this.panelStateChangeCallback(this.showing, this.heroSlotViews.some(view => view.isSummoning));
     }
 
     private onHireButtonClick() {
-        // TODO: Move this logic to the VM and
-        // 1. Find a slot
-        // 2. Notify back to the view that it was added to the slot
-        // 3. Notify back to the view if it should start progress
-        // 4. When progress is done notify the VM to update the queue and update history of heroes
-        // 4.1 Update should include remove from the queue and start progress on next
-
         this.hireHeroCallbacks.forEach(callback => {
             if (this.hero && this.building) {
                 callback(this.hero, this.building);

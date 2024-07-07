@@ -14,6 +14,7 @@ export class BuildingViewModel {
     private heroAddedToSlotSubject = new Subject<[Hero, number]>();
     private heroStartSummoningSubject = new Subject<number>();
     private buildingFinishedSummoningSubject = new Subject<Building>();
+    private buildingPanelStateChangeSubject = new Subject<[boolean, boolean]>();
 
     get buildingClick$() {
         return this.buildingClickSubject.asObservable();
@@ -47,6 +48,10 @@ export class BuildingViewModel {
         return this.buildingFinishedSummoningSubject.asObservable();
     }
 
+    get buildingPanelStateChange$() {
+        return this.buildingPanelStateChangeSubject.asObservable();
+    }
+
     constructor(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
         this._buildings$ = buildings$;
         this._heroes$ = heroes$;
@@ -78,5 +83,10 @@ export class BuildingViewModel {
 
     public onSummonComplete(building: Building) {
         this.buildingFinishedSummoningSubject.next(building);
+    }
+
+    public panelStateChange(visible: boolean, processing: boolean) {
+        console.log('Building panel state: ', visible, processing);
+        this.buildingPanelStateChangeSubject.next([visible, processing]);
     }
 }
