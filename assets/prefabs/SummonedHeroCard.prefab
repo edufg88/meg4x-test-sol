@@ -35,10 +35,13 @@
       },
       {
         "__id__": 92
+      },
+      {
+        "__id__": 94
       }
     ],
     "_prefab": {
-      "__id__": 94
+      "__id__": 96
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -255,7 +258,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 77.30000000000001,
+      "x": -12.699999999999989,
       "y": 0,
       "z": 0
     },
@@ -2173,7 +2176,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 792,
+      "width": 972,
       "height": 184.5
     },
     "_anchorPoint": {
@@ -2269,6 +2272,43 @@
     "fileId": "db8mM0IpFLgYSfOPNhMmUW"
   },
   {
+    "__type__": "b4e30Jj4wtKDaksWQyNsya9",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 95
+    },
+    "heroCardView": null,
+    "heroName": {
+      "__id__": 16
+    },
+    "heroDescription": {
+      "__id__": 22
+    },
+    "heroRank": {
+      "__id__": 29
+    },
+    "heroCost": {
+      "__id__": 43
+    },
+    "heroType": {
+      "__id__": 57
+    },
+    "heroSummonTime": {
+      "__id__": 71
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "e2IAfLHwNPcZROt2upDajd"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -2277,11 +2317,38 @@
       "__id__": 0
     },
     "fileId": "3eo+k5JI1Nf6CDROlHAsU6",
-    "targetOverrides": null,
+    "instance": null,
+    "targetOverrides": [
+      {
+        "__id__": 97
+      }
+    ],
     "nestedPrefabInstanceRoots": [
       {
         "__id__": 2
       }
+    ]
+  },
+  {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 94
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "heroCardView"
+    ],
+    "target": {
+      "__id__": 2
+    },
+    "targetInfo": {
+      "__id__": 98
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "5e3pImD0xALYnbcOTl5wKN"
     ]
   }
 ]

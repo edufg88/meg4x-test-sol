@@ -24,8 +24,8 @@ export class TownSignpostView extends Component {
         this.button.node.on(Button.EventType.CLICK, () => {
             this.buttonClickSubject.next();
         });
-        townSignpostViewModel.buildingFinishedSummoning$.subscribe(building => {            
-            this.heroCount++;
+        townSignpostViewModel.summonedHeroesChange$.subscribe(heroes => {            
+            this.heroCount = heroes.length;
             this.heroCountParent.active = this.heroCount > 0;
             this.heroCountLabel.string = this.heroCount.toString();
         })

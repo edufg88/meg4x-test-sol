@@ -1,22 +1,29 @@
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { Building } from "../models/building";
+import { GameState } from "../models/gameState";
 import { Hero } from "../models/hero";
 
 export class TownSignpostViewModel {
 
     private _townSignpostClick$: Observable<void> = null!;
-    private _buildingFinishedSummoning$: Observable<Building> = null!;
+    private summonedHeroesSubject: Subject<Hero[]> = new Subject<Hero[]>();
+    private summonedHeroes: Hero[] = [];
 
     get townSignpostClick$() {
         return this._townSignpostClick$;
     }
 
-    get buildingFinishedSummoning$() {
-        return this._buildingFinishedSummoning$;
+    get summonedHeroesChange$() {
+        return this.summonedHeroesSubject.asObservable();
     }
 
-    constructor(townSignpostClick$: Observable<void>, buildingFinishedSummoning$: Observable<Building>) {
+    constructor(townSignpostClick$: Observable<void>, gameState$: Observable<GameState>) {
         this._townSignpostClick$ = townSignpostClick$;
-        this._buildingFinishedSummoning$ = buildingFinishedSummoning$;
+        gameState$.subscribe(gameState => {
+            if (this.summonedHeroes.length !== gameState.heroes.length) {
+                this.summonedHeroes = gameState.heroes;
+                this.summonedHeroesSubject.next(gameState.heroes);
+            }
+        })
     }
 }
