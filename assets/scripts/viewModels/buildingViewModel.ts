@@ -61,7 +61,6 @@ export class BuildingViewModel {
     }
 
     public onHeroHire(hero: Hero, building: Building) {
-        console.log('Hero Hired: ', hero.id, building.id);
         if (building) {
             if (building.summoningQueue.length === building.hireSlots) {
                 console.error('Error queue is full');

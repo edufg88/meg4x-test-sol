@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3, tween, Widget, UITransform, view, Label, Prefab, instantiate, ToggleContainer, Toggle, game, Layout } from 'cc';
+import { _decorator, Component, Node, Vec3, tween, UITransform, view, Label, Prefab, instantiate, ToggleContainer, Toggle, game, Layout } from 'cc';
 import { Subject } from 'rxjs';
 import { HeroSpriteData } from '../heroSpriteData';
 import { Building } from '../models/building';
@@ -174,9 +174,7 @@ export class BuildingPanelView extends Component {
     }
 
     private onHeroStartSummoning(slotIdx: number) {
-        console.log('start summoning');
         let subscription = this.heroSlotViews[slotIdx].summonProgress$.subscribe(() => {
-            console.log('summon complete');
             this.summonCompleteCallbacks.forEach(callback => {
                 if (this.building) {
                     callback(this.building);

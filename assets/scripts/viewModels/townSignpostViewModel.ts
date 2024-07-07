@@ -4,13 +4,19 @@ import { Hero } from "../models/hero";
 
 export class TownSignpostViewModel {
 
-    private _buildingFinishedSummoning: Observable<Building> = null!;
+    private _townSignpostClick$: Observable<void> = null!;
+    private _buildingFinishedSummoning$: Observable<Building> = null!;
 
-    get buildingFinishedSummoning$() {
-        return this._buildingFinishedSummoning;
+    get townSignpostClick$() {
+        return this._townSignpostClick$;
     }
 
-    constructor(buildingFinishedSummoning$: Observable<Building>) {
-        this._buildingFinishedSummoning = buildingFinishedSummoning$;
+    get buildingFinishedSummoning$() {
+        return this._buildingFinishedSummoning$;
+    }
+
+    constructor(townSignpostClick$: Observable<void>, buildingFinishedSummoning$: Observable<Building>) {
+        this._townSignpostClick$ = townSignpostClick$;
+        this._buildingFinishedSummoning$ = buildingFinishedSummoning$;
     }
 }
