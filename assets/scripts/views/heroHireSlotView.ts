@@ -16,6 +16,7 @@ export class HeroHireSlotView extends Component {
     private progressBar: ProgressBar = null!;
 
     private summonProgressSubject = new Subject<void>();
+    private hero?: Hero;
 
     get summonProgress$() {
         return this.summonProgressSubject.asObservable();
@@ -34,11 +35,16 @@ export class HeroHireSlotView extends Component {
         this.rankSprite.spriteFrame = heroSpriteData.getRankSpriteFrame(hero.rank);
         this.typeSprite.spriteFrame = heroSpriteData.getTypeSpriteFrame(hero.type);
         this.progressBar.progress = 0;
-    
-        tween(this.progressBar)
-            .to(hero.summonCooldown, { progress: 1 })
-            .call(() => this.onSummonComplete)
-            .start();
+        this.hero = hero;
+    }
+
+    public startProgress() {
+        if (this.hero) {
+            tween(this.progressBar)
+                .to(this.hero.summonCooldown, { progress: 1 })
+                .call(() => this.onSummonComplete)
+                .start();
+        }
     }
 
     private onSummonComplete() {

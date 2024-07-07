@@ -50,7 +50,7 @@ export class BuildingPanelView extends Component {
     }
 
     public init(buildingViewModel: BuildingViewModel) {
-        this.hireHeroCallBacks.push(buildingViewModel.onHeroHire)
+        this.hireHeroCallBacks.push((hero, building) => buildingViewModel.onHeroHire(hero, building));
         this.heroSlotViews = this.heroSlotsParent.getComponentsInChildren(HeroHireSlotView);
         this.heroHireButtonView.init(this.toggleClick$);
         this.heroHireButtonView.buttonClick$.subscribe(() => this.onHireButtonClick());
@@ -58,6 +58,8 @@ export class BuildingPanelView extends Component {
         buildingViewModel.buildings$.subscribe(buildings => this.onBuildingsUpdated(buildings));
         buildingViewModel.heroes$.subscribe(heroes => this.onHeroesUpdated(heroes));
         buildingViewModel.gameState$.subscribe(gameState => this.onGameStateUpdated(gameState));
+        buildingViewModel.heroAddedToSlot$.subscribe(([hero, slotIdx]) => this.onHeroAddedToSlot(hero, slotIdx));
+        buildingViewModel.heroStartSummoning$.subscribe(slotIdx => this.onHeroStartSummoning(slotIdx));
         const screenHeight = view.getVisibleSize().height;
         const panelHeight = this.node.getComponent(UITransform)?.height ?? 0;
         this.showPosition = new Vec3(0, -screenHeight * 0.5 + panelHeight, 0);
@@ -141,6 +143,17 @@ export class BuildingPanelView extends Component {
         this.currency = gameState.currency;
     }
 
+    private onHeroAddedToSlot(hero: Hero, slotIdx: number) {
+        const slot = this.heroSlotViews[slotIdx];
+        if (hero) {
+            slot.init(hero, this.heroSpriteData);
+        }
+    }
+
+    private onHeroStartSummoning(slotIdx: number) {
+        this.heroSlotViews[slotIdx].startProgress();
+    }
+
     private onTownBuildingClick(buildingId: string) {
         if (this.showing) {
             this.hide();
@@ -150,24 +163,18 @@ export class BuildingPanelView extends Component {
     }
 
     private onHireButtonClick() {
-        if (this.building) {
-            if (this.building.summoningQueue.length == this.building.hireSlots) {
-                console.error('Error queue is full');
+        // TODO: Move this logic to the VM and
+        // 1. Find a slot
+        // 2. Notify back to the view that it was added to the slot
+        // 3. Notify back to the view if it should start progress
+        // 4. When progress is done notify the VM to update the queue and update history of heroes
+        // 4.1 Update should include remove from the queue and start progress on next
+
+        this.hireHeroCallBacks.forEach(callback => {
+            if (this.hero && this.building) {
+                callback(this.hero, this.building);
             }
-            else {
-                console.log('Index: ', this.building.summoningQueue.length);
-                const slotIdx = this.building.summoningQueue.length;
-                const slot = this.heroSlotViews[slotIdx];
-                if (this.hero) {
-                    slot.init(this.hero, this.heroSpriteData);
-                    this.hireHeroCallBacks.forEach(callback => {
-                        if (this.hero && this.building) {
-                            callback(this.hero, this.building);
-                        }
-                    });
-                }
-            }
-        }
+        });
     }
 
     public addHireHeroCallback(callback: (hero: Hero, building: Building) => void) {
