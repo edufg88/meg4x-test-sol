@@ -39,7 +39,7 @@ export class Hud extends Component {
 
     public init(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
         this.buildingViewModel = new BuildingViewModel(townBuildings, buildings$, heroes$, gameState$);
-        this.townSignpostViewModel = new TownSignpostViewModel();        
+        this.townSignpostViewModel = new TownSignpostViewModel(this.buildingFinishedSummoning$);
         this.currencyViewModel = new CurrencyViewModel(gameState$, this.heroHire$);
         this.currencyView.init(this.currencyViewModel);
         this.buildingPanelView.init(this.buildingViewModel);

@@ -1,14 +1,16 @@
-import { _decorator, Component, Node } from 'cc';
-const { ccclass, property } = _decorator;
+import { Observable } from "rxjs";
+import { Building } from "../models/building";
+import { Hero } from "../models/hero";
 
-@ccclass('TownSignpostViewModel')
-export class TownSignpostViewModel extends Component {
-    start() {
+export class TownSignpostViewModel {
 
+    private _buildingFinishedSummoning: Observable<Building> = null!;
+
+    get buildingFinishedSummoning$() {
+        return this._buildingFinishedSummoning;
     }
 
-    update(deltaTime: number) {
-        
+    constructor(buildingFinishedSummoning$: Observable<Building>) {
+        this._buildingFinishedSummoning = buildingFinishedSummoning$;
     }
 }
-

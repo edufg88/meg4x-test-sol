@@ -91,6 +91,14 @@ export class GameDataHandler {
         }
     }
 
+    public addHeroToHistory(hero: Hero) {
+        const currentState = this._gameState$.value;
+        if (currentState) {
+            const newState = { ...currentState, heroes: [...currentState.heroes, hero] };
+            this._gameState$.next(newState);
+        }
+    }
+
     public pushHeroToBuilding(hero: Hero, building: Building) {
         let buildings = this._buildings$.value;
         buildings.forEach(b => {

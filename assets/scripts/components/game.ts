@@ -40,12 +40,17 @@ export class Game extends Component {
         });
         this.hud.buildingFinishedSummoning$.subscribe(building => {
             console.log('building finished summoning', building.id);
+            this.addLastHeroToHistory(building);
             this.removeLastHeroFromBuilding(building);
         })
     }
 
     private addHeroToBuilding(hero: Hero, building: Building) {
         this.dataHandler.pushHeroToBuilding(hero, building);
+    }
+
+    private addLastHeroToHistory(building : Building) {
+        this.dataHandler.addHeroToHistory(building.summoningQueue[0]);    
     }
 
     private removeLastHeroFromBuilding(building: Building) {

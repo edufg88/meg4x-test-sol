@@ -1366,7 +1366,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "HeroHireSlot"
+    "value": "HeroHireSlot0"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1507,7 +1507,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "HeroHireSlot-001"
+    "value": "HeroHireSlot1"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1664,7 +1664,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "HeroHireSlot-002"
+    "value": "HeroHireSlot2"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1821,7 +1821,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "HeroHireSlot-003"
+    "value": "HeroHireSlot3"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1978,7 +1978,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "HeroHireSlot-004"
+    "value": "HeroHireSlot4"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -4179,6 +4179,12 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "heroCountParent": {
+      "__id__": 155
+    },
+    "heroCountLabel": {
+      "__id__": 158
+    },
     "_id": "34qPuQUBpFaLLqFWxOg0Q1"
   },
   {
