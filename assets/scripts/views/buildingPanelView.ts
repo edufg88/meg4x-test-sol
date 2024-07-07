@@ -64,6 +64,11 @@ export class BuildingPanelView extends Component {
         buildingViewModel.gameState$.subscribe(gameState => this.onGameStateUpdated(gameState));
         buildingViewModel.heroAddedToSlot$.subscribe(([hero, slotIdx]) => this.onHeroAddedToSlot(hero, slotIdx));
         buildingViewModel.heroStartSummoning$.subscribe(slotIdx => this.onHeroStartSummoning(slotIdx));
+        buildingViewModel.townPanelVisibilityChanged$.subscribe(visible => {
+            if (visible && this.showing) {
+                this.hide();
+            }
+        })
         const screenHeight = view.getVisibleSize().height;
         const panelHeight = this.node.getComponent(UITransform)?.height ?? 0;
         this.showPosition = new Vec3(0, -screenHeight * 0.5 + panelHeight, 0);

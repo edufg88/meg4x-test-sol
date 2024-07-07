@@ -9,6 +9,7 @@ export class BuildingViewModel {
     private _buildings$: Observable<Building[]> = null!;
     private _heroes$: Observable<Hero[]> = null!;
     private _gameState$: Observable<GameState> = null!;
+    private _townPanelVisibilityChanged$: Observable<boolean> = null!;
 
     private heroHireSubject = new Subject<[Hero, Building]>();
     private heroAddedToSlotSubject = new Subject<[Hero, number]>();
@@ -32,6 +33,10 @@ export class BuildingViewModel {
         return this._gameState$;
     }
 
+    get townPanelVisibilityChanged$() {
+        return this._townPanelVisibilityChanged$;
+    }
+
     get heroHire$() {
         return this.heroHireSubject.asObservable();
     }
@@ -52,10 +57,11 @@ export class BuildingViewModel {
         return this.buildingPanelStateChangeSubject.asObservable();
     }
 
-    constructor(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
+    constructor(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>, townPanelVisibilityChanged$: Observable<boolean>) {
         this._buildings$ = buildings$;
         this._heroes$ = heroes$;
         this._gameState$ = gameState$;
+        this._townPanelVisibilityChanged$ = townPanelVisibilityChanged$;
         townBuildings.forEach(building => {
             building.buttonClick$.subscribe(buildingId => this.onTownBuildingClick(buildingId));
         });

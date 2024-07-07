@@ -8,6 +8,7 @@ export class TownSignpostViewModel {
     private _townSignpostClick$: Observable<void> = null!;
     private summonedHeroesSubject: Subject<Hero[]> = new Subject<Hero[]>();
     private summonedHeroes: Hero[] = [];
+    private panelVisibilityChangedSubject: Subject<boolean> = new Subject<boolean>();
 
     get townSignpostClick$() {
         return this._townSignpostClick$;
@@ -15,6 +16,10 @@ export class TownSignpostViewModel {
 
     get summonedHeroesChange$() {
         return this.summonedHeroesSubject.asObservable();
+    }
+
+    get panelVisibilityChanged$() {
+        return this.panelVisibilityChangedSubject.asObservable();
     }
 
     constructor(townSignpostClick$: Observable<void>, gameState$: Observable<GameState>) {
@@ -25,5 +30,9 @@ export class TownSignpostViewModel {
                 this.summonedHeroesSubject.next(gameState.heroes);
             }
         })
+    }
+
+    public onPanelVisibilityChanged(visible: boolean) {
+        this.panelVisibilityChangedSubject.next(visible);
     }
 }

@@ -17,8 +17,10 @@ export class TownSignpostPanelView extends Component {
     private heroSpriteData: HeroSpriteData = null!;
 
     private summonedHeroCardViews: SummonedHeroCardView[] = [];
+    private panelVisibilityChangedCallback: ((visible: boolean) => void) = null!;
 
     public init(townSignpostViewModel: TownSignpostViewModel) {
+        this.panelVisibilityChangedCallback = (visible) => townSignpostViewModel.onPanelVisibilityChanged(visible);
         this.closeButton.node.on(Button.EventType.CLICK, () => {
             this.togglePanel();
         })
@@ -34,6 +36,7 @@ export class TownSignpostPanelView extends Component {
 
     private togglePanel() {
         this.node.active = !this.isVisible();
+        this.panelVisibilityChangedCallback(this.isVisible());
     }
 
     private updateHeroes(heroes: Hero[]) {
