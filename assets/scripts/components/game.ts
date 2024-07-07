@@ -1,9 +1,7 @@
 import { GameDataHandler } from "../gameDataHandler";
-
 import { _decorator, Component } from 'cc';
 import { Hud } from "./hud";
 import { TownBuilding } from "./townBuilding";
-import { map, timer } from "rxjs";
 import { Hero } from "../models/hero";
 import { Building } from "../models/building";
 

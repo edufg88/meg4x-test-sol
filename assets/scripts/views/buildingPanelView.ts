@@ -38,7 +38,6 @@ export class BuildingPanelView extends Component {
     private showing: boolean = false;
     private hidePosition: Vec3 = new Vec3(0, 0, 0);
     private showPosition: Vec3 = new Vec3(0, 0, 0);
-    private buildings: Building[] = [];
     private building?: Building;
     private currency: number = 0;
     private heroSlotViews: HeroHireSlotView[] = [];
@@ -156,7 +155,6 @@ export class BuildingPanelView extends Component {
         if (buildings.length === 0) {
             return;
         }
-        this.buildings = buildings;
         if (!this.building) {
             this.building = buildings[0];
             this.loadBuilding(this.building);

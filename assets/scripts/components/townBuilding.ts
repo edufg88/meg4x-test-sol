@@ -19,7 +19,7 @@ export class TownBuilding extends Component {
 
     onLoad() {
         // TODO: For some reason the icon is OK here
-        // but I getn null on init
+        // but I get null on init
         this.summoningIcon.active = false;
     }
 

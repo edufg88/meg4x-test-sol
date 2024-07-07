@@ -40,13 +40,11 @@ export class Hud extends Component {
     public init(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {        
         this.townSignpostViewModel = new TownSignpostViewModel(this.townSignpostView.buttonClick$, gameState$);
         this.buildingViewModel = new BuildingViewModel(townBuildings, buildings$, heroes$, gameState$, this.townSignpostViewModel.panelVisibilityChanged$);
-        this.currencyViewModel = new CurrencyViewModel(gameState$, this.heroHire$);
-        
+        this.currencyViewModel = new CurrencyViewModel(gameState$, this.heroHire$);        
         this.currencyView.init(this.currencyViewModel);
         this.buildingPanelView.init(this.buildingViewModel);
         this.townSignpostView.init(this.townSignpostViewModel);
-        this.townSignpostPanelView.init(this.townSignpostViewModel); 
-
+        this.townSignpostPanelView.init(this.townSignpostViewModel);
         // TODO: We should check if building is currently building and deal with many buildings properly
         townBuildings[0].init(this.buildingViewModel.buildingPanelStateChange$);
     }
