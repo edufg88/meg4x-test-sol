@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Sprite, ProgressBar, tween } from 'cc';
+import { _decorator, Component, Node, Sprite, ProgressBar, tween, Tween } from 'cc';
 import { Subject } from 'rxjs';
 import { HeroSpriteData } from '../heroSpriteData';
 import { Hero } from '../models/hero';
@@ -17,6 +17,11 @@ export class HeroHireSlotView extends Component {
 
     private summonProgressSubject = new Subject<void>();
     private hero?: Hero;
+    private summoning: boolean = false;
+
+    get isSummoning() {
+        return this.summoning;
+    }
 
     get summonProgress$() {
         return this.summonProgressSubject.asObservable();
@@ -27,9 +32,14 @@ export class HeroHireSlotView extends Component {
         this.rankSprite.node.active = enable;
         this.typeSprite.node.active = enable;
         this.progressBar.node.active = enable;
+        this.progressBar.progress = 0;
     }
 
     public init(hero: Hero, heroSpriteData: HeroSpriteData) {
+        if (hero === this.hero) {
+            console.log('Already initialized with hero: ', hero.id);
+            return;
+        }
         this.enableElements(true);
         this.heroSprite.spriteFrame = heroSpriteData.getHeroSpriteFrame(hero.id);
         this.rankSprite.spriteFrame = heroSpriteData.getRankSpriteFrame(hero.rank);
@@ -38,16 +48,24 @@ export class HeroHireSlotView extends Component {
         this.hero = hero;
     }
 
+    public clear() {
+        this.enableElements(false);
+    }
+
     public startProgress() {
+        this.summoning = true;
+        Tween.stopAllByTarget(this.progressBar);
+        this.progressBar.progress = 0;
         if (this.hero) {
             tween(this.progressBar)
                 .to(this.hero.summonCooldown, { progress: 1 })
-                .call(() => this.onSummonComplete)
+                .call(() => this.onSummonComplete())
                 .start();
         }
     }
 
     private onSummonComplete() {
-        this.summonProgressSubject.next();
+        this.summoning = false;
+        this.summonProgressSubject.next();        
     }
 }

@@ -43,14 +43,16 @@ export class BuildingPanelView extends Component {
     private currency: number = 0;
     private heroSlotViews: HeroHireSlotView[] = [];
     private hero?: Hero;
-    private hireHeroCallBacks: ((hero: Hero, building: Building) => void)[] = [];
+    private hireHeroCallbacks: ((hero: Hero, building: Building) => void)[] = [];
+    private summonCompleteCallbacks: ((building: Building) => void)[] = [];
 
     get toggleClick$() {
         return this.toggleClickSubject.asObservable();
     }
 
     public init(buildingViewModel: BuildingViewModel) {
-        this.hireHeroCallBacks.push((hero, building) => buildingViewModel.onHeroHire(hero, building));
+        this.hireHeroCallbacks.push((hero, building) => buildingViewModel.onHeroHire(hero, building));
+        this.summonCompleteCallbacks.push(building => buildingViewModel.onSummonComplete(building));
         this.heroSlotViews = this.heroSlotsParent.getComponentsInChildren(HeroHireSlotView);
         this.heroHireButtonView.init(this.toggleClick$);
         this.heroHireButtonView.buttonClick$.subscribe(() => this.onHireButtonClick());
@@ -101,6 +103,24 @@ export class BuildingPanelView extends Component {
         */
     }
 
+    private updateBuilding(building: Building) {
+        console.log('buildings changed VIEW', building.summoningQueue.length)
+        this.building = building;
+        let i = 0;
+        for (; i < building.summoningQueue.length; ++i) {
+            this.heroSlotViews[i].init(building.summoningQueue[i], this.heroSpriteData);
+        }
+        for (; i < this.heroSlotViews.length; ++i) {
+            this.heroSlotViews[i].clear();
+        }
+        // TODO: we could probably do this on the VM to be more correct
+        if (building.summoningQueue.length > 0) {
+            if (!this.heroSlotViews[0].isSummoning) {
+                this.onHeroStartSummoning(0);
+            }
+        };
+    }
+
     private loadHeroes(heroes: Hero[]) {
         heroes.forEach(hero => {
             const heroCardNode = instantiate(this.heroCardPrefab);
@@ -132,6 +152,9 @@ export class BuildingPanelView extends Component {
         if (!this.building) {
             this.building = buildings[0];
             this.loadBuilding(this.building);
+        } else {
+            // TODO: Should find appropriate building
+            this.updateBuilding(buildings[0]);
         }
     }
 
@@ -151,6 +174,16 @@ export class BuildingPanelView extends Component {
     }
 
     private onHeroStartSummoning(slotIdx: number) {
+        console.log('start summoning');
+        let subscription = this.heroSlotViews[slotIdx].summonProgress$.subscribe(() => {
+            console.log('summon complete');
+            this.summonCompleteCallbacks.forEach(callback => {
+                if (this.building) {
+                    callback(this.building);
+                }
+            })
+            subscription.unsubscribe();
+        });
         this.heroSlotViews[slotIdx].startProgress();
     }
 
@@ -170,14 +203,10 @@ export class BuildingPanelView extends Component {
         // 4. When progress is done notify the VM to update the queue and update history of heroes
         // 4.1 Update should include remove from the queue and start progress on next
 
-        this.hireHeroCallBacks.forEach(callback => {
+        this.hireHeroCallbacks.forEach(callback => {
             if (this.hero && this.building) {
                 callback(this.hero, this.building);
             }
         });
-    }
-
-    public addHireHeroCallback(callback: (hero: Hero, building: Building) => void) {
-        this.hireHeroCallBacks.push(callback);
     }
 }

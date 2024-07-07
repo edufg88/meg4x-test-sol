@@ -91,7 +91,7 @@ export class GameDataHandler {
         }
     }
 
-    public addHeroToBuilding(hero: Hero, building: Building) {
+    public pushHeroToBuilding(hero: Hero, building: Building) {
         let buildings = this._buildings$.value;
         buildings.forEach(b => {
             if (b.id === building.id) {
@@ -101,11 +101,11 @@ export class GameDataHandler {
         this.updateBuildings(buildings);
     }
 
-    public removeHeroFromBuilding(hero: Hero, building: Building) {
+    public shiftHeroFromBuilding(building: Building) {
         let buildings = this._buildings$.value;
         buildings.forEach(b => {
             if (b.id === building.id) {
-                b.summoningQueue = b.summoningQueue.filter(h => h !== hero);
+                b.summoningQueue.shift();
             }
         })
         this.updateBuildings(buildings);

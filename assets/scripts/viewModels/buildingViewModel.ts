@@ -13,6 +13,7 @@ export class BuildingViewModel {
     private heroHireSubject = new Subject<[Hero, Building]>();
     private heroAddedToSlotSubject = new Subject<[Hero, number]>();
     private heroStartSummoningSubject = new Subject<number>();
+    private buildingFinishedSummoningSubject = new Subject<Building>();
 
     get buildingClick$() {
         return this.buildingClickSubject.asObservable();
@@ -42,13 +43,17 @@ export class BuildingViewModel {
         return this.heroStartSummoningSubject.asObservable();
     }
 
+    get buildingFinishedSummoning$() {
+        return this.buildingFinishedSummoningSubject.asObservable();
+    }
+
     constructor(townBuildings: TownBuilding[], buildings$: Observable<Building[]>, heroes$: Observable<Hero[]>, gameState$: Observable<GameState>) {
         this._buildings$ = buildings$;
         this._heroes$ = heroes$;
         this._gameState$ = gameState$;
         townBuildings.forEach(building => {
             building.buttonClick$.subscribe(buildingId => this.onTownBuildingClick(buildingId));
-        })
+        });
     }
 
     private onTownBuildingClick(buildingId: string) {
@@ -56,8 +61,7 @@ export class BuildingViewModel {
     }
 
     public onHeroHire(hero: Hero, building: Building) {
-        console.log('Hero Hired! ', hero.id, building.id);
-
+        console.log('Hero Hired: ', hero.id, building.id);
         if (building) {
             if (building.summoningQueue.length === building.hireSlots) {
                 console.error('Error queue is full');
@@ -71,5 +75,9 @@ export class BuildingViewModel {
                 this.heroHireSubject.next([hero, building]);
             }
         }
+    }
+
+    public onSummonComplete(building: Building) {
+        this.buildingFinishedSummoningSubject.next(building);
     }
 }

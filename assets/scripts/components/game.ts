@@ -38,11 +38,18 @@ export class Game extends Component {
             this.addHeroToBuilding(hero, building);
             this.decreaseCurrency(hero.cost);
         });
+        this.hud.buildingFinishedSummoning$.subscribe(building => {
+            console.log('building finished summoning', building.id);
+            this.removeLastHeroFromBuilding(building);
+        })
     }
 
     private addHeroToBuilding(hero: Hero, building: Building) {
-        console.log(hero.id, building.id);
-        this.dataHandler.addHeroToBuilding(hero, building);
+        this.dataHandler.pushHeroToBuilding(hero, building);
+    }
+
+    private removeLastHeroFromBuilding(building: Building) {
+        this.dataHandler.shiftHeroFromBuilding(building);
     }
 
     private decreaseCurrency(value: number) {
